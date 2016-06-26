@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version      = GiftWrap::VERSION
   spec.authors      = ["Paul Kwiatkowski"]
   spec.email        = ["paul@groupraise.com"]
-  spec.summary      = "An aggressively simple Ruby presenter library."
-  spec.description  = "An aggressively simple Ruby presenter library. You include a module, call some class-level macro-style methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes from the Rails ecosystem, you might have used a popular 'decorator' library. Think of this like that one, except the term 'presenter' is a better fit."
+  spec.summary      = "A simple Ruby presenter library. For people who don't mind ActiveModel, but do mind ActiveRecord."
+  spec.description  = "A simple Ruby presenter library. For people who don't mind ActiveModel, but do mind ActiveRecord. You include a module, call some class-level macro-style methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes from the Rails ecosystem, you might have used a popular 'decorator' library. Think of this like that one, except the term 'presenter' is a better fit."
   spec.homepage     = "https://github.com/swifthand/adalog"
   spec.license      = "Revised BSD, see LICENSE.md"
 
