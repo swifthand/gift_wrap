@@ -104,6 +104,8 @@ module GiftWrap
       # presenter, as defined by the :with keyword argument.
       # This results in a method by the name of the first parameter by default, but may be
       # customized with the :as keyword argument.
+      # Associations whose method produces an enumerable (ideally an Array) will have each
+      # item wrapped in the presenter and collected in an Array which is then returned.
       def wrap_association(association, with: , as: association, **options)
         wrapped_association_defaults[as] = with
         define_method(as) do

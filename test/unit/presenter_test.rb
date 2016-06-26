@@ -4,6 +4,8 @@ class GiftWrap::PresenterTest < Minitest::Test
 
 ## Test Classes ################################################################
 
+  ##
+  # Everyone loves maps.
   class Map
 
     attr_reader :type, :center, :units, :legend
@@ -29,7 +31,8 @@ class GiftWrap::PresenterTest < Minitest::Test
 
   end
 
-
+  ##
+  # A presenter which adds a few new methods and attributes to a given Map.
   class SimpleMapPresenter
     include GiftWrap::Presenter
 
@@ -55,6 +58,23 @@ class GiftWrap::PresenterTest < Minitest::Test
   end
 
 
+  ##
+  # Gives an explicit name to the wrapped object for reference
+  # internally to the class, and has a method which uses that reference
+  # for use in proving that an internal reference is functioning.
+  class ExplicitReferencePresenter
+    include GiftWrap::Presenter
+
+    wrapped_as :explicit_reference
+
+    def uses_explicit_reference(msg_name)
+      explicit_reference.send(msg_name)
+    end
+
+  end
+
+  ##
+  # An object to associate with a map, for testing wrapped associations.
   class Legend
 
     def initialize(colored_regions, colored_lines)
@@ -72,7 +92,8 @@ class GiftWrap::PresenterTest < Minitest::Test
 
   end
 
-
+  ##
+  # Presenter intended to work with a Legend.
   class LegendPresenter
     include GiftWrap::Presenter
 
@@ -94,13 +115,58 @@ class GiftWrap::PresenterTest < Minitest::Test
 
   end
 
-
+  ##
+  # Map Presenter which wraps its :legend association testing wrapping associations
+  # in a presenter of their own.
   class LegendaryMapPresenter
     include GiftWrap::Presenter
 
     unwrap_for :type, :units
 
     wrap_association :legend, with: LegendPresenter
+
+    def metric?
+      metric_map_units.include?(units)
+    end
+
+    private
+
+    def metric_map_units
+      ['m', 'km']
+    end
+
+  end
+
+  ##
+  # Another presenter for legends as an alternative to test if overriding association
+  # presenters on a per-instance basis functions.
+  class MisleadingLegendPresenter
+    include GiftWrap::Presenter
+
+    unwrap_for :line_meaning
+
+    def red_lines
+      "no congestion"
+    end
+
+    def yellow_lines
+      "no congestion"
+    end
+
+    def green_lines
+      "no congestion"
+    end
+
+  end
+
+  ##
+  # Map Presenter which wraps its :legend association with the name :foobar
+  class FoobarLegendMapPresenter
+    include GiftWrap::Presenter
+
+    unwrap_for :type, :units
+
+    wrap_association :legend, with: LegendPresenter, as: :foobar
 
     def metric?
       metric_map_units.include?(units)
@@ -130,13 +196,13 @@ class GiftWrap::PresenterTest < Minitest::Test
 
   def traffic_legend
     Legend.new(
-      { beige: "land",
-        blue: "water"
+      { beige:  "land",
+        blue:   "water"
       },
-      { green: "no congestion",
+      { green:  "no congestion",
         yellow: "light congestion",
-        red: "heavy congestion",
-        black: "impassable"
+        red:    "heavy congestion",
+        black:  "impassable"
       })
   end
 
@@ -175,6 +241,17 @@ class GiftWrap::PresenterTest < Minitest::Test
   end
 
 
+  test "can reference a wrapped object internally via wrapped_as name" do
+    map       = physical_map
+    presenter = ExplicitReferencePresenter.new(map)
+    assert_equal(map.type, presenter.uses_explicit_reference(:type))
+    assert_equal(map.units, presenter.uses_explicit_reference(:units))
+    assert_raises(NoMethodError) do |variable|
+      presenter.explicit_reference
+    end
+  end
+
+
   test "associations can be wrapped with their own presenter class" do
     map       = map_with_legend
     presenter = LegendaryMapPresenter.new(map)
@@ -185,7 +262,41 @@ class GiftWrap::PresenterTest < Minitest::Test
     assert(presenter.legend.respond_to?(:red_lines))
     refute_includes(presenter.legend.attributes.keys, 'line_meaning')
     assert_includes(presenter.legend.attributes.keys, 'red_lines')
+    assert_equal(presenter.legend.green_lines, 'no congestion')
+    assert_equal(presenter.legend.red_lines, 'heavy congestion')
   end
+
+
+  test "associations' class can be specified on a per-instance basis" do
+    map       = map_with_legend
+    presenter = LegendaryMapPresenter.new(map, associations: {
+      legend: MisleadingLegendPresenter
+    })
+    assert(map.respond_to?(:legend))
+    assert(presenter.respond_to?(:legend))
+    assert(MisleadingLegendPresenter === presenter.legend)
+    assert(presenter.legend.respond_to?(:line_meaning))
+    assert(presenter.legend.respond_to?(:red_lines))
+    assert_equal(presenter.legend.green_lines, 'no congestion')
+    assert_equal(presenter.legend.red_lines, 'no congestion')
+  end
+
+
+  test "associations' name can be something other than assoication name" do
+    map       = map_with_legend
+    presenter = FoobarLegendMapPresenter.new(map)
+    assert(map.respond_to?(:legend))
+    assert(presenter.respond_to?(:foobar))
+    assert(LegendPresenter === presenter.foobar)
+    # Most of this mirrors the other association tests for good measure.
+    assert(presenter.foobar.respond_to?(:line_meaning))
+    assert(presenter.foobar.respond_to?(:red_lines))
+    refute_includes(presenter.foobar.attributes.keys, 'line_meaning')
+    assert_includes(presenter.foobar.attributes.keys, 'red_lines')
+    assert_equal(presenter.foobar.green_lines, 'no congestion')
+    assert_equal(presenter.foobar.red_lines, 'heavy congestion')
+  end
+
 
 end
 
