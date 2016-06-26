@@ -9,6 +9,16 @@ module GiftWrap
 
     module ClassMethods
 
+      ##
+      # Sets delegate methods via ::unwrap_for en masse for all columns.
+      # The :attribute keyword argument can specify which columns are attributes
+      # in one of three ways from different values:
+      # - true: all columns will be considered attributes
+      # - false: no columns will be considered attributes
+      # - A hash with the key :only, whose value specifies which columns to consider as
+      #   attributes, either singular or as an array of column names.
+      # - A hash with the key :except, whose value specifies which columns to consider as
+      #   attributes, either singular or as an array of column names.
       def unwrap_columns_for(active_record_model, attribute: true, **options)
         columns = active_record_model.columns.map { |col| col.name.to_sym }
         if true == attribute || false == attribute

@@ -33,3 +33,14 @@ end
 class Minitest::Test
   extend DeclarativeTests
 end
+
+
+##
+# ActiveRecord Setup for use of GiftWrap::ActiveRecordPresenter
+require 'active_record'
+require 'sqlite3'
+
+ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
+
+require File.join(File.dirname(__FILE__), "database", "user.rb")
+load File.join(File.dirname(__FILE__), "database", "schema.rb")

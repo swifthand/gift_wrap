@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class GiftWrap::PresenterTest < ActiveSupport::TestCase
+class GiftWrap::PresenterTest < Minitest::Test
 
 ## Test Classes ################################################################
 

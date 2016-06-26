@@ -1,15 +1,9 @@
 require 'test_helper'
+require File.join(File.dirname(__FILE__), "..", "data", "user_records.rb")
 
-class GiftWrap::ActiveRecordPresenterTest < ActiveSupport::TestCase
+UserRecords.create!
 
-  fixtures :users
-
-  class ::User < ActiveRecord::Base
-    def initials
-      "#{first_name[0]}#{last_name[0]}"
-    end
-  end
-
+class GiftWrap::ActiveRecordPresenterTest < Minitest::Test
 
   class SimpleUserPresenter
     include GiftWrap::ActiveRecordPresenter
@@ -44,7 +38,7 @@ class GiftWrap::ActiveRecordPresenterTest < ActiveSupport::TestCase
 
 
   def sample_user
-    users(:alpaca_group_leader)
+    User.find(1)
   end
 
 
@@ -61,7 +55,7 @@ class GiftWrap::ActiveRecordPresenterTest < ActiveSupport::TestCase
   test "can respond to additional instance methods" do
     paulwall  = sample_user
     presenter = SimpleUserPresenter.new(paulwall)
-    assert_equal("Paul Wall <paulwall@groupraise.com>", presenter.email_with_display_name)
+    assert_equal("Paul Wall <paulwall@example.com>", presenter.email_with_display_name)
   end
 
 

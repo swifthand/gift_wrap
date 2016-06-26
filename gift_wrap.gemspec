@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version      = GiftWrap::VERSION
   spec.authors      = ["Paul Kwiatkowski"]
   spec.email        = ["paul@groupraise.com"]
-  spec.summary      = "A Dead-Simple Presenter Library."
-  spec.description  = "A dead-simple Presenter library. You include a module, call some class-level 'macro-style' methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes via Rails (such as a very popular 'decorator' library), think of this like that one, except the term 'decorator' is not the best fit. Mistakes of terminology should not survive on legacy alone."
+  spec.summary      = "An aggressively simple Ruby presenter library."
+  spec.description  = "An aggressively simple Ruby presenter library. You include a module, call some class-level macro-style methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes from the Rails ecosystem, you might have used a popular 'decorator' library. Think of this like that one, except the term 'presenter' is a better fit."
   spec.homepage     = "https://github.com/swifthand/adalog"
   spec.license      = "Revised BSD, see LICENSE.md"
 
@@ -26,4 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake",     "~> 10.0"
   spec.add_development_dependency "minitest-reporters", "~> 1.1"
   spec.add_development_dependency "turn-again-reporter", "~> 1.1", ">= 1.1.0"
+  spec.add_development_dependency "activerecord", "~> 4.0", ">= 4.0.0"
+  spec.add_development_dependency "sqlite3", "~> 1.3", ">= 1.3.0"
 end
