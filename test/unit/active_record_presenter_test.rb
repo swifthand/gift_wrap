@@ -1,9 +1,9 @@
 require 'test_helper'
-require File.join(File.dirname(__FILE__), "..", "data", "user_records.rb")
 
-UserRecords.create!
+class ActiveRecordPresenterTest < Minitest::Test
 
-class GiftWrap::ActiveRecordPresenterTest < Minitest::Test
+## Test Implementation Classes #################################################
+
 
   class SimpleUserPresenter
     include GiftWrap::ActiveRecordPresenter
@@ -37,9 +37,15 @@ class GiftWrap::ActiveRecordPresenterTest < Minitest::Test
   end
 
 
+## Setup Helpers #########################################################
+
+
   def sample_user
     User.find(1)
   end
+
+
+## Test Cases ##################################################################
 
 
   test "can unwrap columns" do

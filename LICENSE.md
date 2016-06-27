@@ -1,4 +1,4 @@
-Copyright (c) 2015, Paul Kwiatkowski
+Copyright (c) 2016, Paul Kwiatkowski
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

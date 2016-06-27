@@ -1,11 +1,14 @@
-require 'active_support/json'
-require 'active_support/concern'
-require 'active_support/core_ext/class/attribute'
-require 'active_model/naming'
-require 'active_model/serialization'
-require 'active_model/serializers/json'
-
 module GiftWrap
+
+  def self.config
+    @config ||= GiftWrap::Configuration.new
+  end
+
+
+  def self.configure
+    yield(config)
+  end
+
 end
 
 Dir[File.join(File.dirname(__FILE__), "gift_wrap", "*.rb")].each do |rb_file|

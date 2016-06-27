@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version      = GiftWrap::VERSION
   spec.authors      = ["Paul Kwiatkowski"]
   spec.email        = ["paul@groupraise.com"]
-  spec.summary      = "A simple Ruby presenter library. For people who don't mind ActiveModel, but do mind ActiveRecord."
-  spec.description  = "A simple Ruby presenter library. For people who don't mind ActiveModel, but do mind ActiveRecord. You include a module, call some class-level macro-style methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes from the Rails ecosystem, you might have used a popular 'decorator' library. Think of this like that one, except the term 'presenter' is a better fit."
+  spec.summary      = "A simple Ruby presenter library, for those who enjoy a strong separation of concerns."
+  spec.description  = "A simple Ruby presenter library, for those who enjoy a strong separation of concerns. You include a module, call some class-level macro-style methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes from the Rails ecosystem, you might have used the popular Draper 'decorator' library. Think of this like that one, except the term 'presenter' is a better fit."
   spec.homepage     = "https://github.com/swifthand/adalog"
   spec.license      = "Revised BSD, see LICENSE.md"
 
@@ -20,8 +20,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activemodel", "~> 4.0"
-
+  spec.add_development_dependency "activemodel", "~> 4.0"
   spec.add_development_dependency "bundler",  "~> 1.7"
   spec.add_development_dependency "rake",     "~> 10.0"
   spec.add_development_dependency "minitest-reporters", "~> 1.1"

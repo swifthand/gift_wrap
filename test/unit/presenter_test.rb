@@ -1,35 +1,11 @@
 require 'test_helper'
+require 'domain/map'
+require 'domain/legend'
 
-class GiftWrap::PresenterTest < Minitest::Test
+class PresenterTest < Minitest::Test
 
-## Test Classes ################################################################
+## Test Implementation Classes #################################################
 
-  ##
-  # Everyone loves maps.
-  class Map
-
-    attr_reader :type, :center, :units, :legend
-    attr_accessor :notes
-
-    def initialize(type, center, units, legend = :asshole_mapmaker_forgot_legend)
-      @type   = type
-      @center = center
-      @units  = units
-      @notes  = ""
-      @legend = legend
-    end
-
-    def shows_roads?
-      maps_with_roads.include?(type)
-    end
-
-  private
-
-    def maps_with_roads
-      ['road', 'traffic', 'political']
-    end
-
-  end
 
   ##
   # A presenter which adds a few new methods and attributes to a given Map.
@@ -57,7 +33,6 @@ class GiftWrap::PresenterTest < Minitest::Test
 
   end
 
-
   ##
   # Gives an explicit name to the wrapped object for reference
   # internally to the class, and has a method which uses that reference
@@ -69,25 +44,6 @@ class GiftWrap::PresenterTest < Minitest::Test
 
     def uses_explicit_reference(msg_name)
       explicit_reference.send(msg_name)
-    end
-
-  end
-
-  ##
-  # An object to associate with a map, for testing wrapped associations.
-  class Legend
-
-    def initialize(colored_regions, colored_lines)
-      @colored_regions  = colored_regions
-      @colored_lines    = colored_lines
-    end
-
-    def region_meaning(color)
-      @colored_regions[color]
-    end
-
-    def line_meaning(color)
-      @colored_lines[color]
     end
 
   end
@@ -116,8 +72,8 @@ class GiftWrap::PresenterTest < Minitest::Test
   end
 
   ##
-  # Map Presenter which wraps its :legend association testing wrapping associations
-  # in a presenter of their own.
+  # Map Presenter which wraps its :legend association, for use in testing associations
+  # being wrapped in a presenter of their own.
   class LegendaryMapPresenter
     include GiftWrap::Presenter
 
@@ -181,7 +137,7 @@ class GiftWrap::PresenterTest < Minitest::Test
   end
 
 
-## End Test Classes ############################################################
+## Setup Helpers #########################################################
 
 
   def physical_map
@@ -205,6 +161,9 @@ class GiftWrap::PresenterTest < Minitest::Test
         black:  "impassable"
       })
   end
+
+
+## Test Cases ##################################################################
 
 
   test "unwrapped methods are delegated properly" do
@@ -297,6 +256,4 @@ class GiftWrap::PresenterTest < Minitest::Test
     assert_equal(presenter.foobar.red_lines, 'heavy congestion')
   end
 
-
 end
-

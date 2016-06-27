@@ -1,10 +1,11 @@
-# Presenter Library
 module GiftWrap
   module Presenter
 
     def self.included(base)
       base.extend(ClassMethods)
-      base.send(:include, ActiveModel::Serializers::JSON)
+      if GiftWrap.config.use_serializers? && defined? ActiveModel::Serializers::JSON
+        base.send(:include, ActiveModel::Serializers::JSON)
+      end
     end
 
     ##
