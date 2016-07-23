@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email        = ["paul@groupraise.com"]
   spec.summary      = "A simple Ruby presenter library, for those who enjoy a strong separation of concerns."
   spec.description  = "A simple Ruby presenter library, for those who enjoy a strong separation of concerns. You include a module, call some class-level macro-style methods, and suddenly you're presenting for a wrapped object. No magic. If your knowledge of pattern names comes from the Rails ecosystem, you might have used the popular Draper 'decorator' library. Think of this like that one, except the term 'presenter' is a better fit."
-  spec.homepage     = "https://github.com/swifthand/adalog"
+  spec.homepage     = "https://github.com/swifthand/gift_wrap"
   spec.license      = "Revised BSD, see LICENSE.md"
 
   spec.files = Dir['lib/**/*.rb'] + Dir['bin/*']

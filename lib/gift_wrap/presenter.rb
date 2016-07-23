@@ -112,11 +112,15 @@ module GiftWrap
         define_method(as) do
           presenter_class = wrapped_association_presenter(as)
           associated      = @wrapped_object.send(association)
-          if associated.respond_to?(:each)
-            associated.map { |assoc| presenter_class.new(assoc, **options) }
-          else
-            presenter_class.new(associated, **options)
-          end
+          memoized_within = "@#{as}"
+          instance_variable_get(memoized_within) ||
+            instance_variable_set(memoized_within,
+              if associated.respond_to?(:each)
+                associated.map { |assoc| presenter_class.new(assoc, **options) }
+              else
+                presenter_class.new(associated, **options)
+              end
+          )
         end
       end
 
