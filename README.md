@@ -317,9 +317,9 @@ traffic_legend_presenter.green_lines
 
 ## JSON Serialization
 
-**(Coming Soon)**
+**(Implemented, Example Docs Coming Soon)**
 
 
 ## ActiveRecord Convenience Module
 
-**(Coming Soon)**
+**(Implemented, Example Docs Coming Soon)**
