@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gift_wrap (0.2.0)
+    gift_wrap (1.0.0)
 
 GEM
   remote: https://rubygems.org/

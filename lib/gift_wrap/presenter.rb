@@ -120,7 +120,7 @@ module GiftWrap
               else
                 presenter_class.new(associated, **options)
               end
-          )
+            )
         end
       end
 
