@@ -11,10 +11,11 @@ That sort of "view logic" almost never belongs deep in the core code of your dom
 
 GiftWrap removes this feeling while also being lightweight enough that reading the entire source takes only a few minutes. The core module weighs in at **about 70 lines of code and no depedenecies**. Even the optional helpers for those who use ActiveRecord weigh in at only an additional 30 lines of code, give or take.
 
+Even better, any model logic which is not relevant to presentation or view code is not accidentally accessible on a class implementing `GiftWrap::Presenter` (e.g. persistence code doesn't leak through to templates).
 
 ## Other Options
 
-There is another great gem that does this named [Draper](https://github.com/drapergem/draper), which used to it call itself a "decorator" library, but now focuses on being a tool for "view models". Don't let this indecision in terminology distract from the incredible amount of features and flexibility the project has developed over the last several years.
+Competition benefits the consumer. There is another great gem that does this named [Draper](https://github.com/drapergem/draper), which used to it call itself a "decorator" library, but now focuses on being a tool for "view models". Don't let this indecision in terminology distract from the incredible amount of features and flexibility the project has developed over the last several years.
 
 Another project, [Rectify](https://github.com/andypike/rectify), has a presenter library included in it the same goal as GiftWrap. Rectify's presenters take a more Rails-specific approach, and joins this author in criticising Rails' use of the term "view" for what are just templates.
 
