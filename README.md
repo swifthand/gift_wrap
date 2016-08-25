@@ -5,9 +5,11 @@ A simple Ruby presenter library, for those who enjoy a strong separation of conc
 
 ## What does that mean?
 
-A presenter is just a decorator that is concerned with a presentation layer within some project. GiftWrap provides a simple way to _wrap a domain entity_ (i.e. "model") for purposes of decorating it with said presentational logic.
+A presenter is just a decorator that is specifically concerned with the presentation layer. GiftWrap provides a simple way to "wrap" a domain entity (e.g. model) for the purpose of decorating it with said presentational logic.
 
-Presentational logic rarely belongs deep in your core domain's code, but throwing together classes to house it elsewhere can feel like a chore comprised mostly of boilerplate. GiftWrap reduces this, and is lightweight enough that reading the source in its entirety should take only a few minutes. The core module weighs in at about 70 lines of code sans comments, **no depedenecies**, and even the optional helpers for those who use ActiveRecord weigh in at just 30 lines, give or take.
+That sort of "view logic" almost never belongs deep in the core code of your domain entities. Yet somehow throwing together classes to house it elsewhere can feel like a chore comprised mostly of boilerplate.
+
+GiftWrap removes this feeling while also being lightweight enough that reading the entire source takes only a few minutes. The core module weighs in at **about 70 lines of code and no depedenecies**. Even the optional helpers for those who use ActiveRecord weigh in at only an additional 30 lines of code, give or take.
 
 
 ## Other Options
@@ -312,4 +314,12 @@ traffic_legend_presenter.green_lines
 # => "no congestion"
 ```
 
+
 ## JSON Serialization
+
+**(Coming Soon)**
+
+
+## ActiveRecord Convenience Module
+
+**(Coming Soon)**
