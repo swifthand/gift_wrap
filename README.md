@@ -9,17 +9,17 @@ A presenter is just a decorator that is specifically concerned with the presenta
 
 That sort of "view logic" almost never belongs deep in the core code of your domain entities. Yet somehow throwing together classes to house it elsewhere can feel like a chore comprised mostly of boilerplate.
 
-GiftWrap removes this feeling while also being lightweight enough that reading the entire source takes only a few minutes. The core module weighs in at **about 70 lines of code and no depedenecies**. Even the optional helpers for those who use ActiveRecord weigh in at only an additional 30 lines of code, give or take.
+GiftWrap removes this feeling while also being lightweight enough that reading the entire source takes only a few minutes. The core module weighs in at **about 70 lines of code and no dependencies**. Even the optional helpers for those who use ActiveRecord weigh in at only an additional 30 lines of code, give or take.
 
 Even better, any model logic which is not relevant to presentation or view code is not accidentally accessible on a class implementing `GiftWrap::Presenter` (e.g. persistence code doesn't leak through to templates).
 
 ## Other Options
 
-Competition benefits the consumer. There is another great gem that does this named [Draper](https://github.com/drapergem/draper), which used to it call itself a "decorator" library, but now focuses on being a tool for "view models". Don't let this indecision in terminology distract from the incredible amount of features and flexibility the project has developed over the last several years.
+Competition benefits the consumer, and in this case that's you! There is another great gem that does this named [Draper](https://github.com/drapergem/draper), which used to it call itself a "decorator" library, but now focuses on being a tool for "view models". Don't let this indecision in terminology distract from the incredible amount of features and flexibility the project has developed over the last several years.
 
-Another project, [Rectify](https://github.com/andypike/rectify), has a presenter library included in it the same goal as GiftWrap. Rectify's presenters take a more Rails-specific approach, and joins this author in criticising Rails' use of the term "view" for what are just templates.
+Another project, [Rectify](https://github.com/andypike/rectify), has a presenter library included in it the same goal as GiftWrap. Rectify's presenters take a more Rails-specific approach, and joins this author in criticizing Rails' use of the term "view" for what are just templates.
 
-In both libraries' cases (barring abuse of certain Draper features), separating a domain entity's multi-faceted presentational needs from any internal or persistence logic is achieved just as as well as by GiftWrap. These libraries are equally useful contenders to consider if you like the extras they provide: a large featureset for Draper, additional abstractions in the case of Rectify.
+In both libraries' cases (barring abuse of certain Draper features), separating a domain entity's multi-faceted presentational needs from any internal or persistence logic is achieved just as as well as by GiftWrap. These libraries are equally useful contenders to consider if you like the extras they provide: a large feature set for Draper, additional abstractions in the case of Rectify.
 
 
 ## Overview of Use
@@ -105,7 +105,7 @@ class SimpleMapPresenter
 end
 ```
 
-The methods `type` and `units` are delegated via `unwrap_for`, with `units` being declated as an attribute.
+The methods `type` and `units` are delegated via `unwrap_for`, with `units` being declared as an attribute.
 
 The additional presentational methods are `contains_region?` and `metric`, with `metric` being declared as an attribute.
 
@@ -239,7 +239,7 @@ traffic_legend_presenter.black_lines
 # => NoMethodError: undefined method `black_lines'
 ```
 
-A presenter which wraps a `Map` object and which wishes to expose its `Legend` object would do well to instead expose an instance of `LegendPresenter`. It is preferable to keep adjecent code working at the same level of abstraction where possible.
+A presenter which wraps a `Map` object and which wishes to expose its `Legend` object would do well to instead expose an instance of `LegendPresenter`. It is preferable to keep adjacent code working at the same level of abstraction where possible.
 
 Slavishly re-implementing a method with `def legend` only to return an instance of `LegendPresenter` seems a bit boilerplate, so GiftWrap has a convenience for this:
 
@@ -318,9 +318,36 @@ traffic_legend_presenter.green_lines
 
 ## JSON Serialization
 
-**(Implemented, Example Docs Coming Soon)**
+Although [the `activemodel` gem](https://rubygems.org/gems/activemodel) is not a depedency of GiftWrap, if it is included in a project, then by default `GiftWrap::Presenter` will also include `ActiveModel::Serializers::JSON` for use of its `to_json` and `as_json` methods.
+
+This can be explicitly controlled via the GiftWrap's one and only configuration option. In some code that is executed at load-time, do the following:
+
+```ruby
+GiftWrap.configure do |config|
+  config.use_serializers = false # or true if desired
+end
+```
+
+**A known issue/limitation:** The serializer module also comes with a `from_json` method, but (depending on `activemodel` version) this relies on being able to write directly to an attributes hash via an `attributes=` method, or on having writer methods for every attribute. This is somewhat contrary to the way in which attributes can come from any presentation logic computed by a method which is declared with the `attribute` class macro. While this discrepancy is undesirable, the only solution might be to remove the `from_json` method after inclusion.
 
 
 ## ActiveRecord Convenience Module
 
-**(Implemented, Example Docs Coming Soon)**
+GiftWrap does not depend on, or require ActiveRecord. But for those who are using GiftWrap as presentational wrappers for ActiveRecord models, an convenience module is provided: `GiftWrap::ActiveRecordPresenter`. It includes the standard `GiftWrap::Presenter` but provides an additional convenience method: `unwrap_columns_for` which will set up an attribute for every column detected on a given ActiveRecord subclass at load time.
+
+Assuming a `User` class inheriting from `ActiveRecord::Base` with a `first_name`, `last_name`, `email` and `password` column in the backing database's table, then:
+```ruby
+class UserPresenter
+  unwrap_columns_for User
+end
+```
+Will call `unwrap_for` on all four of those columns, and also declare them as attributes. Similar to individual calls to `unwrap_for`, passing an `:attribute` keyword parameter allows explicitly setting this to `true`, or to not set any columns as attributes by passing `attribute: false`.
+
+However, automatically setting all columns to true will cause methods such as `to_json` and `attributes` to include some data that might be undesirable to expose in a view layer. Like a `password` column for instance. Consequently, the `:attribute` keyword argument can also accept a hash with the key of `:only` or `:except`, which map to the column names which should be included or excluded from being attributes, respectively.
+
+For example, to avoid making our above User's password an attribute:
+```ruby
+class UserPresenter
+  unwrap_columns_for User, attribute: { except: [:password] }
+end
+```
